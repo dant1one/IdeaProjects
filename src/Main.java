@@ -1,133 +1,78 @@
-import java.util.Arrays;
-import java.util.Scanner;
+abstract class Employee {
+    String name;
+    int id;
+    float baseSalary;
 
-class Polindrom {
-    public static boolean sentenceIsPalindrome(String sent) {
-        String cleanedSentence = sent.replaceAll("\\s+", "").toLowerCase();
-        String reversedSentence = new StringBuilder(cleanedSentence).reverse().toString();
-        return cleanedSentence.equals(reversedSentence);
+    public Employee(String name, int id, float baseSalary){
+        this.name = name;
+        this.id = id;
+        this.baseSalary = baseSalary;
     }
 
-    public static boolean isPalindrome(int num) {
-        int original = num, reversed = 0;
-
-        while (num > 0) {
-            int digit = num % 10;
-            reversed = reversed * 10 + digit;
-            num /= 10;
-        }
-
-        return original == reversed;
-    }
+    abstract float calculateSalary();
+    abstract void displayEmployeeInfo();
 
     public static void main(String[] args) {
-        Scanner intscanner = new Scanner(System.in);
-        System.out.print("Введите число: ");
-        int number = intscanner.nextInt();
-
-        if (isPalindrome(number)) {
-            System.out.println("Число " + number + " является палиндромом.");
-        } else {
-            System.out.println("Число " + number + " не является палиндромом.");
+        Employee[] employees = new Employee[2];
+        employees[0] = new FullTimeEmployee("Daniyal", 0, 802);
+        employees[1] = new ContractEmployee("Idris",1,99,1);
+        for(Employee e : employees){
+            e.displayEmployeeInfo();
+            System.out.println("///////");
         }
-
-        intscanner.close();
-
-        Scanner strscanner = new Scanner(System.in);
-        System.out.print("Введите число: ");
-        String sentence = strscanner.nextLine();
-
-        if (sentenceIsPalindrome(sentence)) {
-            System.out.println("Предложение " + sentence + " является палиндромом.");
-        } else {
-            System.out.println("Предложение " + sentence + " не является палиндромом.");
-        }
-
-        strscanner.close();
     }
 }
 
-class StatisticArray {
-    int[] array = {1, 2, 3, 4, 5};
+interface Payable{
+    float getPaymentAmount();
+}
 
-    class SumOfArray {
-        public int calculateSum() {
-            int sum = 0;
-            for (int i : array) {
-                sum += array[i];
-            }
-            return sum;
-        }
+class FullTimeEmployee extends Employee implements Payable{
+    static final float benefit = 1.4f;
+    boolean Insurance = true;
+
+    public FullTimeEmployee(String name, int id, float baseSalary) {
+        super(name, id, baseSalary);
     }
 
-    class AvgOfArray {
-        public double calculateAverage() {
-            SumOfArray sumObject = new SumOfArray();
-            int sum = sumObject.calculateSum();
-            return (double) sum / array.length;
-        }
+    @Override
+    float calculateSalary() {
+        return baseSalary*benefit;
     }
 
-    class MinMaxArray {
-        public int calculateMax() {
-            int max = array[0];
-            for (int i = 1; i < array.length; i++) {
-                if (max < array[i]) {
-                    max = array[i];
-                }
-            }
-            return max;
-        }
-
-        public int calculateSecondMax() {
-            if (array.length < 2) {
-                throw new IllegalArgumentException("Массив должен содержать минимум два элемента.");
-            }
-            Arrays.sort(array);
-            return array[array.length - 2];
-        }
-
-        public int calculateMin() {
-            int min = array[0];
-            for (int i = 1; i < array.length; i++) {
-                if (min > array[i]) {
-                    min = array[i];
-                }
-            }
-            return min;
-        }
-
-        public int calculateSecondMin() {
-            if (array.length < 2) {
-                throw new IllegalArgumentException("Массив должен содержать минимум два элемента.");
-            }
-            Arrays.sort(array);
-            return array[1];
-        }
+    @Override
+    public float getPaymentAmount(){
+        return calculateSalary();
     }
 
-    public static void main(String[] args) {
-        StatisticArray sa = new StatisticArray();
+    @Override
+    void displayEmployeeInfo() {
+        System.out.println("Name: "+name + "\nID: "+id+"\nsalary is: "+calculateSalary()+"\nInsurance: "+Insurance);
+    }
+}
 
-        SumOfArray sumObject = sa.new SumOfArray();
-        int sum = sumObject.calculateSum();
-        System.out.println("Сумма элементов массива: " + sum);
+class ContractEmployee extends Employee implements Payable{
+    float hourlyrate;
+    int hourlyworked;
 
-        AvgOfArray avgObject = sa.new AvgOfArray();
-        double average = avgObject.calculateAverage();
-        System.out.println("Среднее значение массива: " + average);
+    public ContractEmployee(String name, int id, int hourlyworked, float hourlyrate){
+        super(name, id, 0);
+        this.hourlyrate = hourlyrate;
+        this.hourlyworked = hourlyworked;
+    }
 
-        MinMaxArray maxObject = sa.new MinMaxArray();
-        int max = maxObject.calculateMax();
-        System.out.println("Максимальное значение массива: " + max);
+    @Override
+    float calculateSalary(){
+        return hourlyworked*hourlyrate;
+    }
 
-        int secondmax = maxObject.calculateSecondMax();
-        System.out.println("Второе максимальное значение массива: " + secondmax);
+    @Override
+    public float getPaymentAmount(){
+        return calculateSalary();
+    }
 
-        int min = maxObject.calculateMin();
-        System.out.println("Минимальное значение массива: " + min);
-
-        int secondmin = maxObject.calculateSecondMin();
-        System.out.println("Второе минимальное значение массива: " + secondmin);
+    @Override
+    void displayEmployeeInfo(){
+        System.out.println("Name: "+name + "\nID: "+id+"\nyour salary is: "+calculateSalary()+"\nHourly Rate: "+hourlyrate);
     }
 }
