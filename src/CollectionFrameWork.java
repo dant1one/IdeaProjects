@@ -42,9 +42,9 @@ class StudentManager {
     }
 
     void displayStudents() {
-        students.values().stream()
-                .sorted(Comparator.comparingInt(s -> s.id))
-                .forEach(System.out::println);
+        for (Student student : students.values()) {
+            System.out.println(student);
+        }
     }
 
     void searchStudentById(int id) {
@@ -63,12 +63,12 @@ class StudentManager {
 public class CollectionFrameWork {
     public static void main(String[] args) {
         StudentManager manager = new StudentManager();
-        manager.addStudent(1, "Alice", 20);
-        manager.addStudent(2, "Bob", 22);
-        manager.addStudent(3, "Charlie", 21);
-        manager.updateStudent(1, null, null, new HashSet<>(Arrays.asList("Java", "Math")));
-        manager.updateStudent(2, null, null, new HashSet<>(Arrays.asList("Java", "Physics")));
-        manager.updateStudent(3, null, null, new HashSet<>(Arrays.asList("Math", "Physics")));
+        manager.addStudent(1, "Korolain", 67);
+        manager.addStudent(2, "Indushka", 5);
+        manager.addStudent(3, "Sara", 41);
+        manager.updateStudent(1, null, null, new HashSet<>(Arrays.asList("Java", "Prob & Stats")));
+        manager.updateStudent(2, null, null, new HashSet<>(Arrays.asList("Java", "Discrete Math")));
+        manager.updateStudent(3, null, null, new HashSet<>(Arrays.asList("Python", "Python")));
         manager.displayStudents();
         manager.searchStudentById(2);
         manager.listStudentsByCourse("Java");
