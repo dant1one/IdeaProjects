@@ -34,7 +34,7 @@ class Polindrom {
         intscanner.close();
 
         Scanner strscanner = new Scanner(System.in);
-        System.out.print("Введите число: ");
+        System.out.print("Введите предложение: ");
         String sentence = strscanner.nextLine();
 
         if (sentenceIsPalindrome(sentence)) {
